@@ -1,0 +1,44 @@
+class Solution {
+public:
+   
+    bool  isBiparite(vector<vector<int>>& adj,int N,int i,vector<int>& colour){
+        queue<int> q;
+        q.push(i);
+        colour[i]=1;
+        while(!q.empty()){
+            int f = q.front();
+            q.pop();
+            for(auto ele : adj[f])
+            {
+                if(colour[f]==colour[ele])
+                    return false;
+                else if(colour[ele]==-1)
+                {
+                    colour[ele]=1-colour[f];
+                    q.push(ele);
+                }
+            }
+        }
+        return true;
+    }
+    bool possibleBipartition(int N, vector<vector<int>>& dislikes) {
+        ios_base :: sync_with_stdio(false);
+        cin.tie(0);
+        vector<vector<int>> adj(N+1);
+        for(int i=0;i<dislikes.size();i++)
+        {
+            adj[dislikes[i][0]].push_back(dislikes[i][1]);
+            adj[dislikes[i][1]].push_back(dislikes[i][0]);
+        }
+        vector<int> colour(N+1,-1);
+        for(int i=1;i<=N;i++)
+        {
+            if(colour[i]==-1)
+            {
+                if(!isBiparite(adj,N,i,colour))
+                    return false;
+            }
+        }
+        return true;
+    }
+};

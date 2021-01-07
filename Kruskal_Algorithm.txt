@@ -1,0 +1,94 @@
+// Kruskal's Algorithm using Optimised Union find using Path compression technique
+#include<bits/stdc++.h>
+using namespace std;
+struct edge{
+    int src;
+	int dest;
+	int wt;
+};
+struct node{
+    int parent;
+    int rank;
+};
+vector<node> dsuf;
+vector<edge> mst;
+int find(int a)
+{
+    if(dsuf[a].parent==-1)
+    return a;
+    else
+    return dsuf[a].parent=find(dsuf[a].parent);
+}
+void union_op(int fromP,int toP)
+{
+   if(dsuf[fromP].rank>dsuf[toP].rank)
+   dsuf[toP].parent = fromP;
+   else  if(dsuf[fromP].rank<dsuf[toP].rank)
+   dsuf[fromP].parent = toP;
+   else
+   {
+   dsuf[fromP].parent = toP;
+   dsuf[toP].rank += 1;       
+   }
+
+}
+bool  f(edge x , edge y)
+{
+    return (x.wt<y.wt);
+}
+void Kruskal_Algo(vector<edge>& edge_List , int V , int E )
+{
+ sort(edge_List.begin(),edge_List.end(),f);
+ int i=0,j=0;
+ while(i<V-1 && j<E)
+	{
+		int fromP = find(edge_List[j].src);	//FIND absolute parent of subset
+		int toP = find(edge_List[j].dest);
+		
+		if(fromP == toP)
+		{	++j;	continue;	}
+
+		//UNION operation
+		union_op(fromP,toP);	//UNION of 2 sets
+		mst.push_back(edge_List[j]);
+		++i;
+	}
+}
+void Printmst(vector<edge>& mst)
+{
+    cout<<"MST is : ";
+    for(auto e : mst)
+    cout<<e.src<<' '<<e.dest<<' '<<e.wt<<endl;
+}
+int main()
+{
+	int E;	//No of edges
+	int V;	//No of vertices (0 to V-1)
+	cin>>E>>V;
+
+	dsuf.resize(V);	//Mark all vertices as separate subsets with only 1 element
+	
+	for(int i=0;i<V;i++)
+	{
+	    
+	    dsuf[i].parent=-1;
+	    dsuf[i].rank=0;
+	    
+	}
+	
+	vector<edge> edge_List;	//Adjacency list
+	edge temp;
+	for(int i=0;i<E;++i)
+	{
+		int from,to,wt;
+		cin>>from>>to>>wt;
+		temp.src = from;
+		temp.dest = to;
+		temp.wt = wt;
+		edge_List.push_back(temp);
+	}
+     
+	Kruskal_Algo(edge_List,V,E);
+	Printmst(mst);
+	return 0;
+}

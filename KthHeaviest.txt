@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+    int n = 3, k = 2; 
+    int wt[] = { 2, 4, 3 }; 
+    vector< pair<int, int> > adj[4]; 
+void printkthnode(  vector< pair<int, int> > adj[],int wt[],int n,int k)
+{
+    for(int i=0;i<n;i++)
+    sort(adj[i].begin(),adj[i].end());
+    for(int i=0;i<n;i++)
+    {
+        if(adj[i].size()>=k)
+        cout<<adj[i][adj[i].size()-k].second<<endl;
+        else
+        cout<<"No such node for vertex:"<<i<<endl;
+    }
+}
+
+int main() 
+{ 
+
+  
+    // Making adjacency list, storing the nodes 
+    // along with their weight. 
+
+  
+    adj[0].push_back(make_pair(wt[2], 2)); 
+    adj[2].push_back(make_pair(wt[0], 0)); 
+  
+    adj[0].push_back(make_pair(wt[1], 1)); 
+    adj[1].push_back(make_pair(wt[0], 0)); 
+  
+    adj[1].push_back(make_pair(wt[2], 2)); 
+    adj[2].push_back(make_pair(wt[1], 1)); 
+  
+    printkthnode(adj, wt, n, k); 
+    return 0; 
+} 

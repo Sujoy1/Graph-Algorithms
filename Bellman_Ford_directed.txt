@@ -1,0 +1,76 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int V,E;
+struct edge{
+    int src,
+     dest,
+     wt;
+};
+void Bellman_ford(vector<edge> Edges)
+{
+    int s,d,w,i;
+    int parent[V];		//Stores Shortest Path Structure
+	int cost_parent[V];	//Cost of the node to parent edge weight
+	vector<int> value(V,INT_MAX);	//Keeps shortest path values to each vertex from source
+	
+	//Assuming start point as Node-0
+	parent[0] = -1;	//Start node has no parent
+	value[0] = 0;	//start node has value=0 to get picked 1st
+  //  E =Edges.size();
+	//Include (V-1) edges to cover all V-vertices
+	bool updated;
+    for( i =0 ; i < V-1;i++)
+    {
+         cout<<'A';
+        updated = false;
+        for(int j=0;j<E;j++)
+        {
+            s = Edges[j].src;
+            d = Edges[j].dest;
+            w = Edges[j].wt;
+         //   cout<<s<<' '<<d<<' '<<w<<' '<<value[s]<<' '<<value[d];
+            if(value[s]!=INT_MAX&&value[s]+w<value[d])
+            {
+                value[d]=value[s]+w;
+                parent[d]=s;
+                updated = true;
+                //cout<<'A';
+            }
+        }
+        if(updated==false)
+        break;
+    }
+        for(int j=0;j<E&&updated==true;j++)
+        {
+            s = Edges[j].src;
+            d = Edges[j].dest;
+            w = Edges[j].wt;
+            if(value[s]!=INT_MAX&&value[s]+w<value[d])
+            {
+            cout<<"Graph has -ve weight cycle so we can't calculate shortest distance"<<endl;
+            return;
+            }
+        }
+        cout<<"Shortest Distances fromm vertex 0 to other verices are:";
+        
+        for(i=0;i<V;i++)
+        cout<<value[i]<<' ';
+    
+}
+int main()
+{
+    int u,v,w;
+    cin>>V>>E;
+    vector<edge> Edges(E);
+    for(int i=0;i<E;i++)
+    {
+        cin>>u>>v>>w;
+        Edges[i].src=u;
+        Edges[i].dest=v;
+        Edges[i].wt=w;
+    }
+    Bellman_ford(Edges);
+    return 0;
+}

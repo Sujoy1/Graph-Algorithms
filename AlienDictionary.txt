@@ -1,0 +1,79 @@
+
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+class graph{
+int V;
+vector<int> *adj;
+public :
+graph(int V);
+void topoSort();
+void topoutil(int i,vector<int> adj[],bool visited[],stack<int>& s);
+void addEdge(int u,int v);
+};
+graph :: graph(int V)
+{
+    this->V = V;
+    adj = new vector<int>[V];
+}
+void  graph :: addEdge(int u , int v)
+ {
+    adj[u].push_back(v);
+}
+void  graph :: topoutil(int i,vector<int> adj[],bool visited[],stack<int>& s)
+{
+    visited[i]=true;
+    vector<int> :: iterator itr;
+    for(itr=adj[i].begin();itr!=adj[i].end();itr++)
+    {
+        if(!visited[*itr])
+        topoutil(*itr,adj,visited,s);
+    }
+    s.push(i);
+}
+void graph :: topoSort() {
+    // Your code here
+    stack<int> s;
+    bool *visited  = new bool[V];
+    for(int i=0;i<V;i++)
+    visited[i]=false;
+    for(int i=0;i<V;i++)
+    {
+        if(visited[i]==false)
+        topoutil(i,adj,visited,s);
+    }
+    vector<int> result;
+    while(!s.empty())
+    {
+        cout<<(char)('a'+s.top())<<' ';
+        s.pop();
+    }
+   // return result;
+}
+void printOrder(string words[],int words_size,int alpha)
+{
+    graph g(alpha);
+    for(int i=0;i<words_size-1;i++)
+    {
+        string  word1 = words[i];
+        string word2 = words[i+1];
+        for(int j=0;j<min(word1.length(),word2.length());j++)
+        {
+            if(word1[j]!=word2[j])
+            {
+                g.addEdge(word1[j]-'a',word2[j]-'a');
+                break;
+            }
+        }
+    }
+    g.topoSort();
+}
+int main() 
+{ 
+    string words[] = {"baa", "abcd", "abca", "cab", "cad"};
+    // 1st argu   = words.size();
+    // 2nd argu  =  hashing
+    printOrder(words, 5, 4); 
+    return 0; 
+} 

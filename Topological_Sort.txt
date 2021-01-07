@@ -1,0 +1,31 @@
+//  Topological sort is a simple DFS algortihm . Here we adjacency list representations
+void topoutil(int i,vector<int> adj[],bool visited[],stack<int>& s)
+{
+    visited[i]=true;
+    vector<int> :: iterator itr;
+    for(itr=adj[i].begin();itr!=adj[i].end();itr++)
+    {
+        if(!visited[*itr])
+        topoutil(*itr,adj,visited,s);
+    }
+    s.push(i);
+}
+vector<int> topoSort(int V, vector<int> adj[]) {
+    // Your code here
+    stack<int> s;
+    bool *visited  = new bool[V];
+    for(int i=0;i<V;i++)
+    visited[i]=false;
+    for(int i=0;i<V;i++)
+    {
+        if(visited[i]==false)
+        topoutil(i,adj,visited,s);
+    }
+    vector<int> result;
+    while(!s.empty())
+    {
+        result.push_back(s.top());
+        s.pop();
+    }
+    return result;
+}

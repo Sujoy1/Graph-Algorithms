@@ -1,0 +1,50 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+long long n,m;
+void solve(long long a[][100],bool visited[][100],long long x , long long y,long long pixel_color,long long color , long long n,long long m)
+{
+    cout<<x<<' '<<y<<' '<<n<<' '<<m<<endl;
+    if(x<0||x>=n||y<0||y>=m||visited[x][y]!=pixel_color)
+    return;
+    
+    visited[x][y]=true;
+    a[x][y]=color;
+    
+    solve(a,visited,x+1,y,pixel_color,color,n,m);
+    solve(a,visited,x,y+1,pixel_color,color,n,m);
+    solve(a,visited,x-1,y,pixel_color,color,n,m);
+    solve(a,visited,x,y-1,pixel_color,color,n,m);
+}
+
+int main() {
+	//code
+	long long t,i,j,x,y,k;
+	cin>>t;
+	while(t--)
+	{
+	    cin>>m>>n;
+	    long long a[100][100];
+	    bool visited[100][100];
+	    for(i=0;i<n;i++)
+	    {
+	    for(j=0;j<m;j++)
+	    {
+	        cin>>a[i][j];
+	        visited[i][j]=false;
+	    }     
+	    }
+	    cin>>x>>y>>k;
+	    solve(a,visited,y,x,a[y][x],k,n,m);
+	    
+	    for(i=0;i<n;i++)
+	    {
+	    for(j=0;j<m;j++)
+	    {
+	        cout<<a[i][j]<<' ';
+	    }     
+	    }
+	    cout<<endl;
+	}
+	return 0;
+}

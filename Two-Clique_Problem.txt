@@ -1,0 +1,71 @@
+//  Two Clique Problem
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+const int V = 5; 
+bool isBipartiteutil(int i,int G[][V],int coloured[V])
+{
+    
+    coloured[i]=1;
+    queue<int> q;
+    q.push(i);
+    while(!q.empty())
+    {
+        int f = q.front() ;
+        q.pop();
+        for(i=0;i<V;i++)
+        {
+            if(G[f][i]&&coloured[i]==-1)
+            {
+                coloured[i]= 1-coloured[f];
+                q.push(i);
+            }
+            else if(G[f][i]&&coloured[i]==coloured[f])
+            return false;
+        }
+    }
+    return true;
+}
+bool isBipartite(int G[][V])
+{
+    int coloured[V];
+    for(int  i =0;i<V;i++)
+    {
+    coloured[i]=-1;
+    }
+    for(int  i =0;i<V;i++)
+    {
+    if(coloured[i]==-1)
+    {
+    if(isBipartiteutil(i,G,coloured)==false)
+    return false;
+    }
+    }
+    return true;
+}
+    
+
+bool canBeDividedinTwoCliques(int G[][V])
+{
+    for(int  i =0;i<V;i++)
+    {
+    for(int  j=0;j<V;j++)
+    {
+        G[i][j] = (i!=j)? !G[i][j] : 0;
+    }        
+    }
+    return isBipartite(G);
+}
+int main() 
+{ 
+    int G[][V] = {{0, 1, 1, 1, 0}, 
+        {1, 0, 1, 0, 0}, 
+        {1, 1, 0, 0, 0}, 
+        {0, 1, 0, 0, 1}, 
+        {0, 0, 0, 1, 0} 
+    }; 
+  
+    canBeDividedinTwoCliques(G) ? cout << "Yes" : 
+                                  cout << "No"; 
+    return 0; 
+} 

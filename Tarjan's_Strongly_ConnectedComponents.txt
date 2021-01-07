@@ -1,0 +1,77 @@
+// Strongly connected components by Tarjan's algorithm
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+#define V 7
+#define  pb push_back
+unordered_map<int,vector<int>> adj;
+void DFS(int u , vector<int>& disc,vector<int>& low,stack<int>& mystack,vector<bool>& presentInstack)
+{
+    static int time=0;
+    disc[u] = low[u] = time;
+    time += 1;
+    mystack.push(u);
+    presentInstack[u]=true;
+    for(int v : adj[u])
+    {
+        
+        // Tree Edge
+        
+        if(disc[v]==-1){
+            DFS(v,disc,low,mystack,presentInstack);
+            low[u]=min(low[u],low[v]);
+        }
+        
+            //  Back Edge
+           else if(presentInstack[v])
+            {
+                low[u]=min(low[u],disc[v]);
+            }
+            
+            //  Cross Edge ......Do Nothing !!
+        
+    }
+    if(low[u]==disc[u])
+    {
+        cout<<" SCC with head node being at last is : ";
+        while(mystack.top()!=u)
+        {
+            cout<<mystack.top()<<' ';
+             presentInstack[mystack.top()] = false;
+            mystack.pop();
+           
+        }
+        cout<<mystack.top()<<' ';
+            presentInstack[mystack.top()] = false;
+            mystack.pop();
+           
+            cout<<endl;
+    }
+}
+void findSCCs_Tarjan()
+{
+    vector<int> disc(V,-1);
+    vector<int> low(V,-1);
+    vector<bool> presentInstack(V,false);
+    stack<int> mystack;
+    for(int i=0;i<V;i++)
+    {
+        if(disc[i]==-1)
+        DFS(i,disc,low,mystack,presentInstack);
+    }
+}
+int main()
+{
+	adj[0].pb(1);
+	adj[1].pb(2);
+	adj[1].pb(3);
+	adj[3].pb(4);
+	adj[4].pb(0);
+	adj[4].pb(5);
+	adj[4].pb(6);
+	adj[5].pb(6);
+	adj[6].pb(5);
+
+	findSCCs_Tarjan();
+	return 0;
+}

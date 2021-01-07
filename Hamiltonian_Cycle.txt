@@ -1,0 +1,61 @@
+// Hamiltonian Cycle problem
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+#define V 5
+void Print_Cycle(int S ,vector<int>& vertex)
+{
+    cout<<S;
+    for(auto ele : vertex)
+    {
+        cout<<ele<<' ';
+    }
+   cout<<S<<' '<<endl;
+}
+void Hamiltonian_Cycle(int graph[V][V]){
+    vector<int> vertex;
+    int f;
+for(int S=0;S<V;S++){
+   
+    for(int i=0;i<V;i++)
+    {
+        if(i!=S)
+        vertex.push_back(i);
+    }
+    do{
+        int k =S;
+        f=0;
+       for(int i=0;i<vertex.size();i++)
+       {
+           if(graph[k][i]!=0)
+           {
+               vertex.push_back(i);
+               k=i;
+           }
+           else
+           {
+           f=1;    
+           break;
+           }
+       }
+       if(f==0&&graph[k][S]!=0)
+       {
+          
+           Print_Cycle(S,vertex);
+       }
+    }while(next_permutation(vertex.begin(),vertex.end()));
+}
+    
+}
+int main()
+{
+    // matrix representation of graph
+    int graph[V][V] = {{0, 1, 0, 1, 0},  
+                        {1, 0, 1, 1, 1},  
+                        {0, 1, 0, 0, 1},  
+                        {1, 1, 0, 0, 1},  
+                        {0, 1, 1, 1, 0}};  
+    
+    Hamiltonian_Cycle(graph);
+    return 0;
+}

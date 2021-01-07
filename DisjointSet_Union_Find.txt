@@ -1,0 +1,50 @@
+// Ccycle detection in undirected graph using Basic Union find
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> dsuf;
+int find(int a)
+{
+    if(dsuf[a]==-1)
+    return a;
+    else
+    return find(dsuf[a]);
+}
+void union_op(int fromP,int toP)
+{
+    fromP = find(fromP);
+    toP = find(toP);
+    dsuf[fromP] = toP;
+}
+bool isCyclic(vector<pair<int,int>> EdgeList)
+{
+    for(auto p  : EdgeList)
+    {
+        if(find(p.first)==find(p.second))
+        return true;
+        union_op(find(p.first),find(p.second));
+    }
+    return false;
+}
+int main()
+{
+	int E;	//No of edges
+	int V;	//No of vertices (0 to V-1)
+	cin>>E>>V;
+
+	dsuf.resize(V,-1);	//Mark all vertices as separate subsets with only 1 element
+	vector<pair<int,int>> edge_List;	//Adjacency list
+	for(int i=0;i<E;++i)
+	{
+		int from,to;
+		cin>>from>>to;
+		edge_List.push_back({from,to});
+	}
+
+	if(isCyclic(edge_List))
+		cout<<"TRUE\n";
+	else
+		cout<<"FALSE\n";
+	
+	return 0;
+}

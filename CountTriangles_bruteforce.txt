@@ -1,0 +1,50 @@
+#include<bits/stdc++.h> 
+  
+// Number of vertices in the graph 
+#define V 4 
+  
+using namespace std;
+int countTriangle(int  graph[][V] , bool isDirected )
+{
+    int i,j,k;
+    int count=0;
+    for(i=0;i<V;i++)
+    {
+     
+    for(j=0;j<V;j++)
+    {
+     
+    for(k=0;k<V;k++)
+    {
+        if(graph[i][j]&&graph[j][k]&&graph[k][i])
+        count++;
+    }   
+    }       
+    }
+    return isDirected? (count/3) : (count/6) ;
+}
+int main() 
+{ 
+    // Create adjacency matrix 
+    // of an undirected graph 
+    int graph[][V] = { {0, 1, 1, 0}, 
+                       {1, 0, 1, 1}, 
+                       {1, 1, 0, 1}, 
+                       {0, 1, 1, 0} 
+                     }; 
+  
+    // Create adjacency matrix 
+    // of a directed graph 
+    int digraph[][V] = { {0, 0, 1, 0}, 
+                        {1, 0, 0, 1}, 
+                        {0, 1, 0, 0}, 
+                        {0, 0, 1, 0} 
+                       }; 
+  
+    cout << "The Number of triangles in undirected graph : "
+         << countTriangle(graph, false); 
+    cout << "\n\nThe Number of triangles in directed graph : "
+         << countTriangle(digraph, true); 
+  
+    return 0; 
+} 

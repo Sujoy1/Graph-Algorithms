@@ -1,0 +1,65 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+struct cell{
+    int x;
+    int y;
+    int dist;
+    cell()
+    {
+    }
+    cell(int x,int y,int dist) : x(x),y(y),dist(dist)
+    {
+    }    
+};
+bool isInside(int x, int y, int N)
+{
+    if(1<=x&&x<=N&&1<=y&&y<=N)
+    return true;
+    return false;
+}
+bool minStepToReachTarget(int knightPos[],int targetPos[],int N)
+{
+     int dx[] = { -2, -1, 1, 2, -2, -1, 1, 2 }; 
+    int dy[] = { -1, -2, -2, -1, 1, 2, 2, 1 }; 
+  
+    queue<cell> q;
+    q.push(cell(knightPos[0],knightPos[1],0));
+    bool board[N+1][N+1];
+    for(int i=1;i<=N;i++)
+    {
+    for(int j=1;j<=N;j++)
+    {
+        board[i][j]=false;
+    }    
+    }
+    cell t;
+    board[knightPos[0]][knightPos[1]]=true;
+    while(!q.empty())
+    {
+        t = q.front();
+                q.pop();
+        //cout<<"A";
+        if(t.x==targetPos[0]&&t.y==targetPos[1])
+        return t.dist;
+
+        for(int i=0;i<8;i++)
+        {
+          int   u = t.x + dx[i];
+          int   v= t.y +dy[i];
+            if(isInside(u,v,N)&&board[u][v]==false){
+            board[u][v]=true;
+            q.push(cell(u,v,t.dist + 1));
+            }
+        }
+    }
+    
+}
+int main() 
+{ 
+    int N = 30; 
+    int knightPos[] = { 1, 1 }; 
+    int targetPos[] = { 30, 30 }; 
+    cout << minStepToReachTarget(knightPos, targetPos, N); 
+    return 0; 
+} 
