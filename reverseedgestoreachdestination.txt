@@ -1,0 +1,108 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class Graph{
+    int V;
+    list<int>* adj;
+    unordered_map<int,set<int>> dp;
+    
+    public:
+    
+    Graph(int V){
+        this->V = V;
+        adj = new list<int>[V];
+    }
+    
+    void addEdge(int u,int v);
+    void longest(int vertices ,int source,int dst,int& ans,string& longestPath);
+    void DFS(int u,int dst,vector<bool>& visited,int& ans,int length,string curr,string& longestPath);
+    
+}; 
+
+void Graph :: addEdge(int u,int v){
+    
+    //directed graph
+    adj[u].push_back(v);
+    dp[u].insert(v);
+    
+}
+
+void Graph :: DFS(int u,int dst,vector<bool>& visited,int& ans,int length,string curr,string& longestPath){
+    visited[u]= true;
+    
+   // cout<<u<<endl;
+    
+    curr += to_string(u);
+    curr += "->";
+    
+    if(u==dst){
+    if(ans>length){
+        ans=length;
+        longestPath=curr;
+    }
+    visited[u]=false;
+    return;
+    }
+    list<int> :: iterator itr;
+    
+     // if neighbour exists
+    
+    for(itr = adj[u].begin();itr!=adj[u].end();itr++){
+        
+       
+        if(!visited[*itr])
+        DFS(*itr,dst,visited,ans,length,curr,longestPath);
+
+    }
+    
+            
+        // remain
+        for(auto ele : dp){
+            if(ele.first!=u){
+                if(ele.second.find(u)!=ele.second.end()&&!visited[ele.first])
+                DFS(ele.first,dst,visited,ans,length+1,curr,longestPath);
+            }
+        }
+    visited[u]=false;
+}
+
+void Graph :: longest(int vertices ,int source,int dst,int& ans,string& longestPath){
+    
+    vector<bool> visited;
+    visited.assign(vertices,false);
+    
+    visited[source]=true;
+    
+    int length=0;
+
+    string curr="";
+    
+    DFS(source,dst,visited,ans,length,curr,longestPath);
+    
+    
+}
+int main() {
+	// your code goes here
+	Graph g(7);
+    g.addEdge(0, 1);
+    g.addEdge(2,1);
+    g.addEdge(2,3);
+    g.addEdge(5, 1);
+    g.addEdge(4, 5);
+    g.addEdge(6, 4);
+    g.addEdge(6, 3);
+   
+    int s = 0;
+    int ans = INT_MAX;
+    int dst = 6;
+    string longestPath="";
+    
+    g.longest(7,s,dst,ans,longestPath);
+
+    
+    cout << "Following is minimum edges to reverse "<<ans<<endl;
+    cout<<"PATH IS : "<<longestPath<<endl;
+        
+   return 0;
+}
