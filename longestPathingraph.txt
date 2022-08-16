@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class Graph{
+    int V;
+    list<int>* adj;
+    
+    public:
+    
+    Graph(int V){
+        this->V = V;
+        adj = new list<int>[V];
+    }
+    
+    void addEdge(int u,int v);
+    void longest(int vertices ,int source,int& ans,string& longestPath);
+    void DFS(int u,vector<bool>& visited,int& ans,int length,string curr,string& longestPath);
+    
+}; 
+
+void Graph :: addEdge(int u,int v){
+    
+    //directed graph
+    adj[u].push_back(v);
+    
+}
+
+void Graph :: DFS(int u,vector<bool>& visited,int& ans,int length,string curr,string& longestPath){
+    visited[u]= true;
+    length++;
+    curr += to_string(u);
+    curr += "->";
+    
+    if(ans<length){
+        ans=length;
+        longestPath=curr;
+    }
+    list<int> :: iterator itr;
+    
+    for(itr = adj[u].begin();itr!=adj[u].end();itr++){
+        if(!visited[*itr])
+        DFS(*itr,visited,ans,length,curr,longestPath);
+    }
+    visited[u]=false;
+}
+
+void Graph :: longest(int vertices ,int source,int& ans,string& longestPath){
+    
+    vector<bool> visited;
+    visited.assign(vertices,false);
+    
+    visited[source]=true;
+    
+    int length=0;
+
+    string curr="";
+    
+    DFS(source,visited,ans,length,curr,longestPath);
+    
+    
+}
+int main() {
+	// your code goes here
+	Graph g(6);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 3);
+    g.addEdge(1, 2);
+    g.addEdge(2, 4);
+    g.addEdge(2, 5);
+    g.addEdge(2, 3);
+    g.addEdge(3, 5);
+    g.addEdge(3, 4);
+    g.addEdge(4, 5);
+   
+    int s = 1;
+    int ans = 0;
+    string longestPath="";
+    cout << "Following are longest distances from "
+            "source vertex "
+         << s << " \n";
+    g.longest(6,s,ans,longestPath);
+    cout<<longestPath<<endl;
+		return 0;
+		
+		// for weighted graph , have a map to store weights , {u,v} => w
+}
