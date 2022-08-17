@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool canMeasureWater(int x,int y,int z) {
+        
+        if(x+y<z)
+        return false;
+        
+        set<int> s;
+        queue<int> q;
+        q.push(0);
+        s.insert(0);
+        vector<int> directions;
+          directions.push_back(x);
+          directions.push_back(-x);
+          directions.push_back(y);
+          directions.push_back(-y);
+        
+        
+        
+        while(!q.empty()){
+            
+            int a = q.front();
+            q.pop();
+            if(a==z)
+                return true;
+            
+            for(auto ele:directions){
+                int state = a + ele;
+                if(s.find(state)==s.end()&&state>=0&&state<=(x+y)){
+                    s.insert(state);
+                    q.push(state);
+                }
+          }
+            
+        }
+        return false;
+    }
+};
